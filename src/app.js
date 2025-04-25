@@ -1,7 +1,7 @@
 import express from "express";
 
 const app = express();
-app.use(express.json())
+app.use(express.json());
 
 const livros = [
   {
@@ -14,6 +14,12 @@ const livros = [
   },
 ];
 
+const buscarLivro = function (id) {
+  return livros.findIndex((livro) => {
+    return livro.id === Number(id);
+  });
+};
+
 app.get("/", (req, res) => {
   res.status(200).send("Curso de node.js!");
 });
@@ -22,9 +28,14 @@ app.get("/livros", (req, res) => {
   res.status(200).json(livros);
 });
 
+app.get("/livros/:id", (req, res) => {
+  const index = buscarLivro(req.params.id);
+  res.status(200).json(livros[index]);
+});
+
 app.post("/livros", (req, res) => {
   livros.push(req.body);
-  res.status(201).send("Livro cadastrado.")
+  res.status(201).send("Livro cadastrado.");
 });
 
 export default app;
