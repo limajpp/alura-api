@@ -20,6 +20,10 @@ const buscarLivro = function (id) {
   });
 };
 
+const excluirLivro = function (id) {
+  return livros.splice(buscarLivro(id), 1);
+};
+
 app.get("/", (req, res) => {
   res.status(200).send("Curso de node.js!");
 });
@@ -36,6 +40,17 @@ app.get("/livros/:id", (req, res) => {
 app.post("/livros", (req, res) => {
   livros.push(req.body);
   res.status(201).send("Livro cadastrado.");
+});
+
+app.put("/livros/:id", (req, res) => {
+  const index = buscarLivro(req.params.id);
+  livros[index].titulo = req.body.titulo;
+  res.status(200).json(livros);
+});
+
+app.delete("/livros/:id", (req, res) => {
+  excluirLivro(req.params.id);
+  res.status(200).send("Livro removido.");
 });
 
 export default app;
