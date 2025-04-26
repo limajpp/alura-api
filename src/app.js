@@ -1,5 +1,6 @@
 import express from "express";
 import connectDb from "./config/dbConnect.js";
+import livro from "./models/Livro.js";
 
 const connection = await connectDb();
 connection.on("error", (error) => {
@@ -12,32 +13,12 @@ connection.once("open", () => {
 const app = express();
 app.use(express.json());
 
-const livros = [
-  {
-    id: 1,
-    titulo: "O Senhor dos Anéis",
-  },
-  {
-    id: 2,
-    titulo: "O Hobbit",
-  },
-];
-
-const buscarLivro = function (id) {
-  return livros.findIndex((livro) => {
-    return livro.id === Number(id);
-  });
-};
-
-const excluirLivro = function (id) {
-  return livros.splice(buscarLivro(id), 1);
-};
-
 app.get("/", (req, res) => {
   res.status(200).send("Curso de node.js!");
 });
 
-app.get("/livros", (req, res) => {
+app.get("/livros", async (req, res) => {
+  const livros = await livro.find({});
   res.status(200).json(livros);
 });
 
